@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Duel Culture G</title>
+<meta name="description" content="Duel de culture générale à 2 joueurs en 60 secondes">
+<meta name="theme-color" content="#2f6bff">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⚔️%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#eef0fb;--card:#fff;--ink:#1b1d3a;--mut:#6a6e91;--p1:#2f6bff;--p2:#ff4d6d;--ok:#22b573;--ko:#e5384f;--sh:0 4px 0 rgba(27,29,58,.12);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1024;--card:#1d1f45;--ink:#f1f2ff;--mut:#9a9dcc;--p1:#5c8aff;--p2:#ff6b88;--sh:0 4px 0 rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{--bg:#0f1024;--card:#1d1f45;--ink:#f1f2ff;--mut:#9a9dcc;--p1:#5c8aff;--p2:#ff6b88;--sh:0 4px 0 rgba(0,0,0,.35)}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Trebuchet MS",system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column;overflow:hidden;-webkit-user-select:none;user-select:none}
+.zone{flex:1;display:flex;flex-direction:column;padding:12px 14px;min-height:0;margin:8px 10px;border-radius:24px;background:var(--card);box-shadow:var(--sh);border-top:6px solid var(--c)}
+.p1{--c:var(--p1)}.p2{--c:var(--p2)}
+.zone.p2{transform:rotate(180deg)}
+.head{display:flex;justify-content:space-between;align-items:center}
+.name{font-weight:800;color:var(--c);letter-spacing:.04em;text-transform:uppercase;font-size:.85rem}
+.streak{font-size:.85rem;font-weight:800;color:#ff8a00;min-width:50px;text-align:center}
+.score{font-size:1.9rem;font-weight:900;color:var(--c);min-width:50px;text-align:right}
+.q{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;font-size:1.2rem;font-weight:800;padding:6px 4px;line-height:1.25}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts button{font:inherit;font-weight:700;font-size:.95rem;padding:15px 6px;border:0;border-radius:16px;background:var(--bg);color:var(--ink);cursor:pointer;box-shadow:var(--sh);transition:transform .08s}
+.opts button:active{transform:translateY(3px);box-shadow:none}
+.opts button.ok{background:var(--ok);color:#fff}.opts button.ko{background:var(--ko);color:#fff}
+.tm{display:flex;align-items:center;gap:8px;margin:6px 0 2px}.spd{font-weight:800;color:#ff8a00;font-size:.85rem;min-width:46px;text-align:right}.vs{text-align:center;font-weight:900;color:var(--mut);font-size:.8rem;letter-spacing:.2em}
+.bar{flex:1;height:12px;border-radius:9px;background:var(--card);overflow:hidden;box-shadow:inset 0 2px 3px rgba(0,0,0,.15)}
+.bar i{display:block;height:100%;width:100%;border-radius:9px;background:linear-gradient(90deg,var(--p2),var(--p1));transition:width .1s linear}
+.timer{font-weight:900;font-size:1.5rem;min-width:44px;text-align:center}
+.timer.low{color:var(--ko);animation:pulse .5s infinite alternate}
+@keyframes pulse{to{transform:scale(1.25)}}
+.ov{position:fixed;inset:0;background:radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--p1) 35%,var(--bg)),var(--bg) 60%),var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;padding:24px;z-index:5}
+.ov.hide{display:none}
+.logo{font-size:4rem;margin:0}
+.ov h1{margin:0;font-size:2.2rem;font-weight:900;background:linear-gradient(90deg,var(--p1),var(--p2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.ov p{margin:0;color:var(--mut);max-width:310px;line-height:1.4}
+.big{font:inherit;font-weight:900;font-size:1.3rem;padding:16px 44px;border:0;border-radius:18px;background:linear-gradient(90deg,var(--p1),var(--p2));color:#fff;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.25)}
+.big:active{transform:translateY(4px);box-shadow:none}
+.res{font-size:1.4rem;font-weight:900}.cards{display:flex;gap:14px}.sc{background:var(--card);border-radius:22px;padding:14px 16px;min-width:130px;border-top:6px solid var(--c);box-shadow:var(--sh);opacity:.85}.sc b{color:var(--c);font-size:.9rem;text-transform:uppercase}.sc .pts{font-size:3rem;font-weight:900;color:var(--c);line-height:1.1}.sc small{display:block;font-size:.8rem;font-weight:700;color:var(--mut);line-height:1.6;text-align:left}.sc .cr{height:1.6rem;font-size:1.5rem}.sc.win{opacity:1;transform:scale(1.08);box-shadow:0 0 0 3px var(--c),0 0 30px color-mix(in srgb,var(--c) 50%,transparent);animation:pop .5s}@keyframes pop{from{transform:scale(.6)}to{transform:scale(1.08)}}.logo{animation:pop .6s}.big.alt{background:var(--card);color:var(--ink)}.col{display:flex;flex-direction:column;align-items:center;gap:14px}.row{display:flex;gap:8px;justify-content:center}.row input{font:inherit;font-weight:800;font-size:1.2rem;text-transform:uppercase;text-align:center;width:110px;border:2px solid var(--mut);border-radius:14px;background:var(--card);color:var(--ink);-webkit-user-select:text;user-select:text}.sm{font-size:1rem;padding:12px 18px}.lnk{-webkit-user-select:text;user-select:text;background:var(--card);padding:10px 14px;border-radius:12px;font-size:.8rem;word-break:break-all;max-width:300px;font-weight:700}.ghost{background:none;border:0;color:var(--mut);font:inherit;font-weight:700;cursor:pointer}#net{z-index:6}.cf{position:fixed;top:-2rem;font-size:1.6rem;animation:fall 2.6s linear forwards;pointer-events:none;z-index:9}@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+.rd{font-size:1.1rem;padding:18px 24px;animation:beat .8s infinite alternate}.rd:disabled{animation:none;opacity:.7}@keyframes beat{to{transform:scale(1.06)}}
+.cd{font-size:7rem;font-weight:900;color:var(--ink);animation:pulse .5s infinite alternate}
+</style>
+</head>
+<body>
+<div class="zone p2" id="z2"></div>
+<div class="vs">VS</div>
+<div class="zone p1" id="z1"></div>
+
+<div class="ov" id="ov">
+  <div class="logo" id="logo">⚔️</div>
+  <h1 id="ttl">Duel Culture G</h1>
+  <p id="msg">Chacun son chrono de 60 s. Bonne réponse +1, mauvaise −1 et ton chrono s’accélère ⚡ Série de 3 = bonus 🔥</p>
+  <div class="res" id="res"></div>
+  <button class="big" id="go">Jouer à deux ici</button><button class="big alt" id="on">🌐 Jouer en ligne</button>
+</div>
+
+<div class="ov hide" id="net">
+  <div class="logo">🌐</div><h1>Jeu en ligne</h1>
+  <div class="col" id="lob"><button class="big" id="mk">Créer une partie</button><p>ou rejoins ton ami avec son code</p><div class="row"><input id="code" maxlength="6" placeholder="CODE"><button class="big sm" id="jn">Rejoindre</button></div></div>
+  <div class="col" id="wait" style="display:none"><div class="col" id="lk"><p>Envoie ce lien à ton ami :</p><div class="lnk" id="lnk"></div><button class="big sm" id="cp">Partager le lien</button></div><p id="st"></p></div>
+  <button class="ghost" id="bk">← Retour</button>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script>
+// [question, bonne réponse, 3 mauvaises]
+const Q=[
+["Capitale de l’Australie ?","Canberra","Sydney","Melbourne","Perth"],
+["Combien de continents compte-t-on ?","7","5","6","8"],
+["Qui a écrit « Les Misérables » ?","Victor Hugo","Émile Zola","Balzac","Flaubert"],
+["Planète la plus proche du Soleil ?","Mercure","Vénus","Mars","Terre"],
+["Plus grand océan du monde ?","Pacifique","Atlantique","Indien","Arctique"],
+["Dans quel pays se trouvent les pyramides de Gizeh ?","Égypte","Mexique","Soudan","Irak"],
+["Symbole chimique de l’or ?","Au","Ag","Or","Fe"],
+["Qui a peint la Joconde ?","Léonard de Vinci","Michel-Ange","Raphaël","Botticelli"],
+["Plus long fleuve d’Afrique ?","Nil","Congo","Niger","Zambèze"],
+["Année de la chute du mur de Berlin ?","1989","1991","1985","1979"],
+["Capitale du Japon ?","Tokyo","Kyoto","Osaka","Séoul"],
+["Combien d’os a un adulte ?","206","180","250","300"],
+["Capitale de Djibouti ?","Djibouti","Tadjourah","Obock","Dikhil"],
+["Qui a atteint l’Amérique en 1492 ?","Christophe Colomb","Magellan","Vasco de Gama","James Cook"],
+["Plus grand désert chaud du monde ?","Sahara","Gobi","Kalahari","Atacama"],
+["Que désigne H₂O ?","L’eau","Le sel","L’oxygène","Le sucre"],
+["Plus haute montagne du monde ?","Everest","K2","Mont Blanc","Kilimandjaro"],
+["Joueurs par équipe sur le terrain au football ?","11","10","9","12"],
+["Dans quel pays se trouve la tour de Pise ?","Italie","France","Espagne","Grèce"],
+["Quel roi est surnommé le Roi-Soleil ?","Louis XIV","Louis XVI","Napoléon","Charlemagne"],
+["Animal terrestre le plus rapide ?","Guépard","Lion","Antilope","Autruche"],
+["Capitale du Canada ?","Ottawa","Toronto","Montréal","Vancouver"],
+["Gaz absorbé par les plantes pour la photosynthèse ?","CO₂","Oxygène","Azote","Hydrogène"],
+["Qui a écrit « Roméo et Juliette » ?","Shakespeare","Molière","Dickens","Goethe"],
+["Plus grand pays du monde par superficie ?","Russie","Canada","Chine","États-Unis"],
+["Combien de côtés a un hexagone ?","6","5","8","7"],
+["Monnaie du Japon ?","Yen","Won","Yuan","Dollar"],
+["Plus petit pays du monde ?","Vatican","Monaco","Malte","Saint-Marin"],
+["Quel organe pompe le sang ?","Cœur","Foie","Poumon","Rein"],
+["Capitale de l’Espagne ?","Madrid","Barcelone","Séville","Valence"],
+["Capitale de l’Éthiopie ?","Addis-Abeba","Nairobi","Khartoum","Asmara"],
+["Capitale du Brésil ?","Brasilia","Rio de Janeiro","São Paulo","Salvador"],
+["Capitale de l’Égypte ?","Le Caire","Alexandrie","Louxor","Gizeh"],
+["Capitale de la Turquie ?","Ankara","Istanbul","Izmir","Antalya"],
+["Capitale de l’Italie ?","Rome","Milan","Naples","Venise"],
+["Plus grand animal du monde ?","Baleine bleue","Éléphant","Girafe","Requin-baleine"],
+["Joueurs par équipe sur le terrain au basket ?","5","6","7","4"],
+["Quel pays a gagné la Coupe du monde 2018 ?","France","Croatie","Brésil","Allemagne"],
+["Qui a écrit « Le Petit Prince » ?","Saint-Exupéry","Camus","Sartre","Jules Verne"],
+["Langue officielle du Brésil ?","Portugais","Espagnol","Anglais","Français"],
+["Plus grand lac d’Afrique ?","Victoria","Tanganyika","Tchad","Malawi"],
+["Qui est l’inventeur du téléphone ?","Graham Bell","Edison","Tesla","Marconi"],
+["À quelle température l’eau bout-elle (°C) ?","100","90","120","80"],
+["Combien de jours dans une année bissextile ?","366","365","364","367"],
+["Plus grande planète du système solaire ?","Jupiter","Saturne","Neptune","Uranus"],
+["Qui a marché le premier sur la Lune ?","Neil Armstrong","Buzz Aldrin","Gagarine","Collins"],
+["Pièces d’un joueur au départ aux échecs ?","16","12","14","18"],
+["Dans quel pays se trouve le Kilimandjaro ?","Tanzanie","Kenya","Ouganda","Éthiopie"],
+["Quelle mer sépare l’Afrique de l’Arabie ?","Mer Rouge","Mer Morte","Mer Noire","Mer Caspienne"],
+["En quelle année débute la Première Guerre mondiale ?","1914","1939","1905","1918"],
+["Premier président des États-Unis ?","George Washington","Lincoln","Jefferson","John Adams"],
+["Plus grand continent ?","Asie","Afrique","Amérique","Europe"],
+["Quel métal est liquide à température ambiante ?","Mercure","Plomb","Fer","Zinc"],
+["Cordes d’une guitare classique ?","6","4","5","8"],
+["Qui a composé la 9e symphonie ?","Beethoven","Mozart","Bach","Chopin"],
+["Quel fruit compose surtout le guacamole ?","Avocat","Citron","Tomate","Mangue"],
+["D’où vient le sushi ?","Japon","Chine","Corée","Thaïlande"],
+["Racine carrée de 144 ?","12","14","16","11"],
+["Qui a peint « Guernica » ?","Picasso","Dalí","Monet","Matisse"],
+["Symbole chimique du sodium ?","Na","So","S","N"],
+["Plus long os du corps humain ?","Fémur","Tibia","Humérus","Radius"],
+["Pays natal de Pelé ?","Brésil","Argentine","Portugal","Uruguay"],
+["Combien de planètes dans le système solaire ?","8","9","7","10"]
+];
+const sh=(a,r=Math.random)=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=r()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const rng=s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const $=id=>document.getElementById(id);
+let order,P,t,tick,live,net=null,busy=false,hiT;
+const BASE=location.href.split("#")[0]+"#";
+const nm=k=>net?(k==1?"Toi":"Ton ami"):"Joueur "+k;
+const beep=(f,d=.08)=>{try{const c=beep.c||(beep.c=new AudioContext()),o=c.createOscillator(),g=c.createGain();o.frequency.value=f;g.gain.value=.06;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d)}catch(e){}};
+const push=()=>{if(net&&P){const p=P[1];net.emit("st",{s:p.s,t:+p.t.toFixed(1),v:p.v,ok:p.ok,ko:p.ko,best:p.best,done:p.done})}};
+function confetti(){for(let i=0;i<24;i++){const e=document.createElement("span");e.className="cf";e.textContent=["🎉","✨","🏆","⭐"][i%4];e.style.left=Math.random()*100+"vw";e.style.animationDelay=Math.random()*1.2+"s";document.body.appendChild(e);setTimeout(()=>e.remove(),4500)}}
+function renderOpp(){$("z2").innerHTML=`<div class="head"><span class="name">Ton ami</span><span class="score" id="os">0</span></div><div class="tm"><div class="bar"><i id="b2"></i></div><span class="spd" id="x2"></span><span class="timer" id="t2"></span></div><div class="q" style="color:var(--mut)">Ton ami joue…</div>`;upd(2)}
+
+function render(k){
+  const p=P[k],q=order[p.i%order.length],z=$("z"+k);
+  z.innerHTML=`<div class="head"><span class="name">${nm(k)}</span><span class="streak">${p.st>=3?"🔥 x"+p.st:""}</span><span class="score">${p.s}</span></div>
+  <div class="tm"><div class="bar"><i id="b${k}"></i></div><span class="spd" id="x${k}"></span><span class="timer" id="t${k}"></span></div><div class="q">${q[0]}</div><div class="opts">${sh(q.slice(1)).map(o=>`<button>${o}</button>`).join("")}</div>`;
+  const bs=[...z.querySelectorAll("button")];
+  bs.forEach(b=>b.onclick=()=>answer(k,b,q[1],bs));upd(k);
+}
+function answer(k,b,good,bs){
+  if(!live||P[k].lock||P[k].done)return;
+  const p=P[k];p.lock=true;
+  const ok=b.textContent===good;
+  if(ok){p.st++;p.ok++;p.best=Math.max(p.best,p.st);p.s+=p.st>=3?2:1}else{p.st=0;p.ko++;p.v=Math.min(p.v+.5,4);p.s--;upd(k)}
+  b.classList.add(ok?"ok":"ko");push();beep(ok?660:180,ok?.08:.2);if(!ok&&navigator.vibrate)navigator.vibrate(80);
+  if(!ok)bs.forEach(x=>{if(x.textContent===good)x.classList.add("ok")});
+  setTimeout(()=>{p.i++;p.lock=false;if(live&&!p.done)render(k)},ok?220:600);
+}
+function upd(k){const p=P[k],T=$("t"+k);if(!T)return;T.textContent=Math.ceil(p.t);const S=$("os");if(k==2&&S)S.textContent=p.s;T.classList.toggle("low",p.t<=10);$("b"+k).style.width=(p.t/60*100)+"%";$("x"+k).textContent=p.v>1?"⚡x"+p.v:""}
+function fin(k){$("z"+k).innerHTML=`<div class="q" style="flex-direction:column;gap:8px"><div style="font-size:2.4rem">⏱️</div>Temps écoulé !<div class="score" style="font-size:2.6rem">${P[k].s}</div><div style="font-size:.9rem;color:var(--mut);font-weight:600">En attente de l’autre joueur…</div></div>`}
+let R=null;
+const rdyHTML=(k,mine)=>`<div class="head"><span class="name">${nm(k)}</span></div><div class="q" style="flex-direction:column;gap:14px">${mine?`<button class="big rd" id="r${k}">Touche pour commencer</button><div style="font-size:.85rem;color:var(--mut);font-weight:600">La partie démarre quand les deux joueurs sont prêts</div>`:`<div style="font-size:2rem">⏳</div><div style="color:var(--mut)">${nm(k)} se prépare…</div>`}</div>`;
+function showReady(){
+  R={1:false,2:false};
+  $("ov").classList.add("hide");$("net").classList.add("hide");
+  $("z2").style.transform=net?"none":"";
+  $("z1").innerHTML=rdyHTML(1,true);$("z2").innerHTML=rdyHTML(2,!net);
+  $("r1").onclick=()=>setReady(1);
+  if(!net)$("r2").onclick=()=>setReady(2);
+}
+function setReady(k){
+  if(!R||R[k])return;R[k]=true;beep(520);
+  const b=$("r"+k);if(b){b.textContent="✅ Prêt !";b.disabled=true}
+  if(net&&k==1)net.emit("rdy",{});
+  chk();
+}
+function chk(){if(R&&R[1]&&R[2]){R=null;setTimeout(count,400)}}
+function countdown(seed=Math.random()*1e9|0){
+  order=sh(Q,rng(seed));const N=()=>({i:0,s:0,st:0,t:60,v:1,ok:0,ko:0,best:0,done:false});P={1:N(),2:N()};live=false;
+  $("z2").style.transform=net?"none":"";showReady();
+}
+function count(){
+  $("ov").classList.remove("hide");render(1);net?renderOpp():render(2);
+  $("logo").textContent="";$("ttl").style.display="none";$("msg").style.display="none";$("res").style.display="none";$("go").style.display="none";$("on").style.display="none";
+  let n=3;$("logo").className="cd";$("logo").textContent=n;
+  const c=setInterval(()=>{n--;if(n>0){$("logo").textContent=n}else{clearInterval(c);start()}},800);
+}
+function start(){
+  live=true;
+  upd(1);upd(2);
+  $("ov").classList.add("hide");
+  clearInterval(tick);
+  let n=0;tick=setInterval(()=>{(net?[1]:[1,2]).forEach(k=>{const p=P[k];if(p.done)return;p.t-=.1*p.v;if(p.t<=0){p.t=0;p.done=true;fin(k);push()}else upd(k)});if(++n%5==0&&!P[1].done)push();if(P[1].done&&P[2].done)end()},100);
+}
+function end(){
+  live=false;busy=false;clearInterval(tick);
+  const a=P[1].s,b=P[2].s;
+  $("logo").className="logo";$("logo").textContent=a===b?"🤝":"🏆";
+  $("ttl").style.display="";$("ttl").textContent=a===b?"Égalité parfaite !":net?(a>b?"Tu as gagné ! 🎉":"Ton ami l’emporte !"):"Joueur "+(a>b?1:2)+" l’emporte !";
+  $("msg").style.display="none";
+  $("res").style.display="";
+  const card=k=>{const p=P[k],w=k==1?a>b:b>a;return `<div class="sc ${w?"win":""}" style="--c:var(--p${k})"><div class="cr">${w?"👑":""}</div><b>${nm(k)}</b><div class="pts">${p.s}</div><small>✅ ${p.ok} bonnes<br>❌ ${p.ko} erreurs<br>🔥 série max ${p.best}</small></div>`};
+  $("res").innerHTML=`<div class="cards">${card(1)}${card(2)}</div>`;
+  $("go").style.display="";$("go").textContent="Revanche";$("on").style.display=net?"none":"";if(a!==b){confetti();beep(784,.3)}
+  $("ov").classList.remove("hide");
+}
+const share=async u=>{try{if(navigator.share){await navigator.share({title:"Duel Culture G",text:"Viens me défier !",url:u});return}}catch(e){}try{await navigator.clipboard.writeText(u);$("cp").textContent="Copié ✅"}catch(e){$("cp").textContent="Copie le lien ci-dessus"}};
+let PEER=null;
+function link(code,isHost){return new Promise((ok,ko)=>{
+  const id="duelcg-"+code,peer=PEER=new Peer(isHost?id:undefined);let done=false;
+  const wrap=c=>{const hs={};
+    c.on("data",d=>{if(d&&hs[d.t])hs[d.t].forEach(f=>f({isMe:false,data:d.d}))});
+    return{emit(t,d){try{c.send({t,d})}catch(e){}(hs[t]||[]).forEach(f=>f({isMe:true,data:d}));return Promise.resolve()},
+      on(t,f){(hs[t]=hs[t]||[]).push(f)},
+      onPeers(f){c.on("close",()=>f({left:[{isMe:false}]}))},
+      leave(){try{c.close()}catch(e){}}}};
+  peer.on("error",ko);
+  if(isHost)peer.on("connection",c=>{if(done)return c.close();c.on("open",()=>{done=true;ok(wrap(c))})});
+  else peer.on("open",()=>{const c=peer.connect(id);c.on("open",()=>ok(wrap(c)))});
+})}
+async function connect(code,isHost){
+  $("lob").style.display="none";$("wait").style.display="";$("lk").style.display=isHost?"":"none";
+  const S=$("st");S.textContent=isHost?"En attente de ton ami…":"Connexion…";
+  const url=BASE+code;$("lnk").textContent=url;$("cp").onclick=()=>share(url);
+  try{net=await link(code,isHost)}catch(e){S.textContent=e&&e.type==="peer-unavailable"?"Partie introuvable : vérifie le code ou attends que ton ami crée la partie.":"Connexion impossible ("+(e&&e.type||"réseau")+"). Réessaie.";return}
+  net.on("go",m=>{if(busy)return;busy=true;clearInterval(hiT);$("net").classList.add("hide");$("ov").classList.remove("hide");countdown(+(m.data&&m.data.seed)||1)});
+  net.on("hi",m=>{if(m.isMe||!isHost||busy)return;S.textContent="Ami connecté !";setTimeout(()=>{if(!busy)net.emit("go",{seed:Math.random()*1e9|0})},700)});
+  net.on("st",m=>{if(m.isMe||!P)return;const d=m.data||{};P[2]={...P[2],s:+d.s||0,t:+d.t||0,v:+d.v||1,ok:+d.ok||0,ko:+d.ko||0,best:+d.best||0,done:!!d.done};upd(2);if(live&&P[1].done&&P[2].done)end()});
+  net.on("rdy",m=>{if(m.isMe||!R)return;R[2]=true;$("z2").innerHTML='<div class="head"><span class="name">Ton ami</span></div><div class="q" style="flex-direction:column;gap:10px"><div style="font-size:2rem">✅</div>Ton ami est prêt !</div>';chk()});
+  net.onPeers(c=>{if(R&&c.left.some(p=>!p.isMe)){$("z2").innerHTML='<div class="q">Ton ami s’est déconnecté 😕</div>';return}if(live&&c.left.some(p=>!p.isMe)){P[2].done=true;P[2].t=0;upd(2);if(P[1].done)end()}});
+  S.textContent=isHost?"Ami connecté !":"Connecté, en attente de l’hôte…";
+  if(!isHost){const hi=()=>{if(!busy&&net)net.emit("hi",{})};hi();hiT=setInterval(hi,2000)}
+}
+$("go").onclick=()=>net?net.emit("go",{seed:Math.random()*1e9|0}):countdown();
+$("on").onclick=()=>{$("ov").classList.add("hide");$("net").classList.remove("hide")};
+$("mk").onclick=()=>connect(Array.from({length:4},()=>"abcdefghjkmnpqrstuvwxyz23456789"[Math.random()*31|0]).join(""),true);
+$("jn").onclick=()=>{const c=$("code").value.toLowerCase().replace(/[^a-z0-9]/g,"");if(c.length>=3)connect(c,false)};
+$("bk").onclick=()=>{if(net){net.leave();net=null}if(PEER){PEER.destroy();PEER=null}clearInterval(hiT);busy=false;$("lob").style.display="";$("wait").style.display="none";$("net").classList.add("hide");$("ov").classList.remove("hide")};
+const h=(location.hash||"").slice(1).toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,6);
+if(h.length>=3){$("ov").classList.add("hide");$("net").classList.remove("hide");connect(h,false)}
+</script>
+</body>
+</html>
